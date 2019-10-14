@@ -12,7 +12,7 @@ resources:
     properties:
       host: '${resource.Cloud_Machine_1.*}'
       osType: linux
-      account: CF Ansible
+      account: CF-ANSIBLE01
       username: root
       privateKeyFile: /root/.ssh/id_rsa
       playbooks:
