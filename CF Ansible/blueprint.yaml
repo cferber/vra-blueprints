@@ -1,3 +1,5 @@
+name: CF Ansible
+version: 1
 formatVersion: 1
 inputs: {}
 resources:
