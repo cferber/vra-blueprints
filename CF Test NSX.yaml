@@ -1,0 +1,51 @@
+formatVersion: 1
+inputs:
+  env:
+    type: string
+    enum:
+      - 'env:on-prem'
+      - 'env:AWS'
+      - 'env:Azure'
+    default: 'env:on-prem'
+    title: Environment
+    description: Target Environment
+  OS:
+    type: string
+    enum:
+      - CF-Ubuntu
+      - CF-CentOS
+    default: CF-Ubuntu
+    title: Operating System
+    description: Target OS
+  Availability:
+    type: string
+    enum:
+      - working days
+      - 8am-5pm
+      - 24x7
+    default: working days
+    title: Availability
+    description: Server Uptime
+resources:
+  Cloud_Machine_1:
+    type: Cloud.Machine
+    metadata:
+      layoutPosition:
+        - 0
+        - 1
+    properties:
+      image: '${input.OS}'
+      flavor: CF-Small
+      autoplacement: true
+      constraints:
+        - tag: '${input.env}'
+      networks:
+        - network: '${resource.Cloud_Network_1.id}'
+  Cloud_Network_1:
+    type: Cloud.Network
+    metadata:
+      layoutPosition:
+        - 1
+        - 0
+    properties:
+      networkType: outbound

@@ -1,0 +1,48 @@
+inputs:
+  env:
+    type: string
+    enum:
+      - 'env:on-prem'
+      - 'env:AWS'
+      - 'env:Azure'
+    default: 'env:on-prem'
+    title: Environment
+    description: Target Environment
+  Department:
+    type: string
+    enum:
+      - Central-IT
+      - Engineering
+    title: Department
+resources:
+  Cloud_Machine_1:
+    type: Cloud.Machine
+    metadata:
+      layoutPosition:
+        - 0
+        - 1
+    properties:
+      dumpproperties: false
+      environment: '${input.env}'
+      department: '${input.Department}'
+      image: CF-Ubuntu
+      flavor: CF-Medium
+      cloudConfig: |
+        #cloud-config
+        hostname: '${self.resourceName}'
+      constraints:
+        - tag: '${input.env}'
+      networks:
+        - name: '${resource.Cloud_Network_1.name}'
+          network: '${resource.Cloud_Network_1.id}'
+  Cloud_Network_1:
+    type: Cloud.Network
+    metadata:
+      layoutPosition:
+        - 1
+        - 0
+    properties:
+      name: CF-WP-Network
+      networkType: existing
+      constraints:
+        - tag: 'network:WP'

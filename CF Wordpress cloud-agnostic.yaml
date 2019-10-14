@@ -1,0 +1,151 @@
+name: UIBasicUC2
+iteration: 1
+description: More Complex BP with External Storage
+inputs:
+  env:
+    type: string
+    enum:
+      - 'env:on-prem'
+      - 'env:AWS'
+      - 'env:Azure'
+    default: 'env:on-prem'
+    title: Target Environment
+    description: Target Environment
+  size:
+    type: string
+    enum:
+      - CF-Small
+      - CF-Medium
+    description: Size of Nodes
+    title: Database Tier Size
+  username:
+    type: string
+    minLength: 4
+    maxLength: 20
+    pattern: '[a-z]+'
+    title: Database Username
+    description: Database Username
+  userpassword:
+    type: string
+    pattern: '[a-z0-9A-Z@#$]+'
+    encrypted: true
+    title: Database Password
+    description: Database Password
+  count:
+    type: integer
+    default: 2
+    maximum: 5
+    minimum: 2
+    title: Wordpress Cluster Size
+    description: Wordpress Cluster Size (Number of nodes)
+  archiveDiskSize:
+    type: number
+    default: 4
+    maximum: 10
+    title: Wordpress Archive Disk Size
+    description: Size of Wordpress archive disk
+  databaseDiskSize:
+    type: number
+    default: 4
+    maximum: 10
+    title: MySQL Data Disk Size
+    description: Size of database disk
+resources:
+  DBTier:
+    type: Cloud.Machine
+    metadata:
+      layoutPosition:
+        - 0
+        - 0
+    properties:
+      name: mysql
+      image: CF-Ubuntu
+      flavor: '${input.size}'
+      customizationSpec: vra-linux-custom
+      sshKeyName: CF-Key-US-Virginia
+      constraints:
+        - tag: '${input.env}'
+      tags:
+        - key: AppName
+          value: mysql
+      storage:
+        disks:
+          - capacityGb: '${input.databaseDiskSize}'
+            name: DatabaseDisk
+      remoteAccess:
+        authentication: usernamePassword
+        username: '${input.username}'
+        password: '${input.userpassword}'
+      cloudConfig: |
+        #cloud-config
+        repo_update: true
+        repo_upgrade: all
+
+        packages:
+         - mysql-server
+
+        runcmd:
+         - sed -e '/bind-address/ s/^#*/#/' -i /etc/mysql/mysql.conf.d/mysqld.cnf
+         - service mysql restart
+         - mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'mysqlpassword';"
+         - mysql -e "FLUSH PRIVILEGES;"
+      networks:
+        - name: '${resource["Target-Network"].name}'
+          network: '${resource["Target-Network"].id}'
+  WebTier:
+    type: Cloud.Machine
+    metadata:
+      layoutPosition:
+        - 0
+        - 1
+    properties:
+      name: wordpress
+      image: CF-Ubuntu
+      count: '${input.count}'
+      storage:
+        disks:
+          - capacityGb: '${input.archiveDiskSize}'
+            name: ArchiveDisk
+      flavor: CF-Small
+      customizationSpec: vra-linux-custom
+      sshKeyName: CF-Key-US-Virginia
+      constraints:
+        - tag: '${input.env}'
+      tags:
+        - key: AppName
+          value: wordpress
+      cloudConfig: |
+        #cloud-config
+         repo_update: true
+         repo_upgrade: all
+
+         packages:
+         - apache2
+         - php
+         - php-mysql
+         - libapache2-mod-php
+         - php-mcrypt
+         - mysql-client
+
+         runcmd:
+         - mkdir -p /var/www/html/mywordpresssite && cd /var/www/html && wget https://wordpress.org/latest.tar.gz && tar -xzf /var/www/html/latest.tar.gz -C /var/www/html/mywordpresssite --strip-components 1
+         - i=0; while [ $i -le 5 ]; do mysql --connect-timeout=3 -h ${DBTier.networks[0].address} -u root -pmysqlpassword -e "SHOW STATUS;" && break || sleep 15; i=$((i+1)); done
+         - mysql -u root -pmysqlpassword -h ${DBTier.networks[0].address} -e "create database wordpress_blog;"
+         - mv /var/www/html/mywordpresssite/wp-config-sample.php /var/www/html/mywordpresssite/wp-config.php
+         - sed -i -e s/"define( 'DB_NAME', 'database_name_here' );"/"define( 'DB_NAME', 'wordpress_blog' );"/ /var/www/html/mywordpresssite/wp-config.php && sed -i -e s/"define( 'DB_USER', 'username_here' );"/"define( 'DB_USER', 'root' );"/ /var/www/html/mywordpresssite/wp-config.php && sed -i -e s/"define( 'DB_PASSWORD', 'password_here' );"/"define( 'DB_PASSWORD', 'mysqlpassword' );"/ /var/www/html/mywordpresssite/wp-config.php && sed -i -e s/"define( 'DB_HOST', 'localhost' );"/"define( 'DB_HOST', '${DBTier.networks[0].address}' );"/ /var/www/html/mywordpresssite/wp-config.php
+         - service apache2 reload
+      networks:
+        - name: '${resource["Target-Network"].name}'
+          network: '${resource["Target-Network"].id}'
+  Target-Network:
+    type: Cloud.Network
+    metadata:
+      layoutPosition:
+        - 1
+        - 0
+    properties:
+      name: CF-WP-Network
+      networkType: existing
+      constraints:
+        - tag: '${input.env}'
+        - tag: 'network:WP'

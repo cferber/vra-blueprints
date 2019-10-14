@@ -1,0 +1,36 @@
+inputs:
+  env:
+    type: string
+    enum:
+      - 'env:on-prem'
+      - 'env:AWS'
+      - 'env:Azure'
+    default: 'env:on-prem'
+    title: Environment
+    description: Target Environment
+resources:
+  Cloud_Machine_1:
+    type: Cloud.Machine
+    metadata:
+      layoutPosition:
+        - 0
+        - 1
+    properties:
+      image: CF-Windows2012
+      flavor: CF-Medium
+      cloudConfig: |
+        #cloud-config
+      constraints:
+        - tag: '${input.env}'
+      networks:
+        - name: '${resource.Cloud_Network_1.name}'
+          assignment: static
+  Cloud_Network_1:
+    type: Cloud.Network
+    metadata:
+      layoutPosition:
+        - 1
+        - 0
+    properties:
+      name: VM Network
+      networkType: existing

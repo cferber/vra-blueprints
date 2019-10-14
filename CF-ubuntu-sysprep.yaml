@@ -1,0 +1,31 @@
+inputs:
+  env:
+    type: string
+    enum:
+      - 'env:on-prem'
+      - 'env:AWS'
+      - 'env:Azure'
+    default: 'env:on-prem'
+    title: Environment
+    description: Target Environment
+resources:
+  Cloud_Machine_1:
+    type: Cloud.Machine
+    metadata:
+      layoutPosition:
+        - 1
+        - 1
+    properties:
+      image: CF-Ubuntu
+      flavor: CF-Small
+      cloudConfig: |
+        #cloud-config
+        repo_update: true
+        repo_upgrade: all
+        packages:
+          - mysql-server
+        runcmd:
+          - touch /tmp/cloudinit-has-run
+      constraints:
+        - tag: '${input.env}'
+      customizationSpec: vra-linux-custom
