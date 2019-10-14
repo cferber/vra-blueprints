@@ -1,3 +1,5 @@
+name: Ubuntu Server with Sysprep
+version: 1
 inputs:
   env:
     type: string
