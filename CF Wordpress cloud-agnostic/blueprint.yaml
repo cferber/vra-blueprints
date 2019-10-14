@@ -1,4 +1,5 @@
-name: UIBasicUC2
+name: Wordpress Stack
+version: 1
 iteration: 1
 description: More Complex BP with External Storage
 inputs:
