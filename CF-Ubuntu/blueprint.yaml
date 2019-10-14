@@ -1,3 +1,5 @@
+name: Ubuntu
+version: 1
 inputs:
   env:
     type: string
