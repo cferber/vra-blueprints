@@ -1,3 +1,5 @@
+name: CF Test NSX linked
+version: 1
 formatVersion: 1
 inputs: {}
 resources:
