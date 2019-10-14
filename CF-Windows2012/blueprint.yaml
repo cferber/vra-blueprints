@@ -1,3 +1,5 @@
+name: Windows 2012 Server
+version: 1
 inputs:
   env:
     type: string
