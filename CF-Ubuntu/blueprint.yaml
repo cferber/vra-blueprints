@@ -1,5 +1,5 @@
 name: Ubuntu
-version: 1
+version: 2
 inputs:
   env:
     type: string
@@ -15,14 +15,11 @@ inputs:
     enum:
       - Central-IT
       - Engineering
+    default: Central-IT
     title: Department
 resources:
   Cloud_Machine_1:
     type: Cloud.Machine
-    metadata:
-      layoutPosition:
-        - 0
-        - 1
     properties:
       dumpproperties: false
       environment: '${input.env}'
@@ -39,12 +36,8 @@ resources:
           network: '${resource.Cloud_Network_1.id}'
   Cloud_Network_1:
     type: Cloud.Network
-    metadata:
-      layoutPosition:
-        - 1
-        - 0
     properties:
-      name: CF-WP-Network
+      name: Dev Network
       networkType: existing
       constraints:
-        - tag: 'network:WP'
+        - tag: 'env:dev'
