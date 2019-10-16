@@ -1,5 +1,5 @@
 name: Wordpress Stack
-version: 1
+version: 2
 iteration: 1
 description: More Complex BP with External Storage
 inputs:
@@ -54,15 +54,10 @@ inputs:
 resources:
   DBTier:
     type: Cloud.Machine
-    metadata:
-      layoutPosition:
-        - 0
-        - 0
     properties:
       name: mysql
       image: CF-Ubuntu
       flavor: '${input.size}'
-      customizationSpec: vra-linux-custom
       sshKeyName: CF-Key-US-Virginia
       constraints:
         - tag: '${input.env}'
@@ -79,9 +74,9 @@ resources:
         password: '${input.userpassword}'
       cloudConfig: |
         #cloud-config
+        hostname: ${self.resourceName}
         repo_update: true
         repo_upgrade: all
-
         packages:
          - mysql-server
 
@@ -95,10 +90,6 @@ resources:
           network: '${resource["Target-Network"].id}'
   WebTier:
     type: Cloud.Machine
-    metadata:
-      layoutPosition:
-        - 0
-        - 1
     properties:
       name: wordpress
       image: CF-Ubuntu
@@ -108,7 +99,6 @@ resources:
           - capacityGb: '${input.archiveDiskSize}'
             name: ArchiveDisk
       flavor: CF-Small
-      customizationSpec: vra-linux-custom
       sshKeyName: CF-Key-US-Virginia
       constraints:
         - tag: '${input.env}'
@@ -117,9 +107,9 @@ resources:
           value: wordpress
       cloudConfig: |
         #cloud-config
+         hostname: ${self.resourceName}
          repo_update: true
          repo_upgrade: all
-
          packages:
          - apache2
          - php
@@ -140,10 +130,6 @@ resources:
           network: '${resource["Target-Network"].id}'
   Target-Network:
     type: Cloud.Network
-    metadata:
-      layoutPosition:
-        - 1
-        - 0
     properties:
       name: CF-WP-Network
       networkType: existing
