@@ -1,5 +1,5 @@
 name: CF Ansible
-version: 1
+version: 2
 formatVersion: 1
 inputs: {}
 resources:
@@ -17,15 +17,6 @@ resources:
       privateKeyFile: /root/.ssh/id_rsa
       playbooks:
         provision: /root/playbooks/centos-apps.yml
-  Cloud_Machine_2:
-    type: Cloud.Machine
-    metadata:
-      layoutPosition:
-        - 1
-        - 0
-    properties:
-      image: ''
-      flavor: ''
   Cloud_Machine_1:
     type: Cloud.Machine
     metadata:
@@ -38,12 +29,3 @@ resources:
       customizationSpec: vra-linux-custom
       constraints:
         - tag: 'env:on-prem'
-  Cloud_AWS_EC2_Instance_1:
-    type: Cloud.AWS.EC2.Instance
-    metadata:
-      layoutPosition:
-        - 2
-        - 0
-    properties:
-      image: ''
-      flavor: ''
