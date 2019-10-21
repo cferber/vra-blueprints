@@ -1,5 +1,5 @@
-name: CF Ansible
-version: 2
+name: Linux Server with Ansible
+version: 3
 formatVersion: 1
 inputs: {}
 resources:
