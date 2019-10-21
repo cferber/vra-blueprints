@@ -16,7 +16,8 @@ resources:
       username: root
       privateKeyFile: /root/.ssh/id_rsa
       playbooks:
-        provision: /root/playbooks/centos-apps.yml
+        provision: 
+          - /root/playbooks/centos-apps.yml
   Cloud_Machine_1:
     type: Cloud.Machine
     metadata:
