@@ -31,13 +31,3 @@ resources:
         hostname: '${self.resourceName}'
       constraints:
         - tag: '${input.env}'
-      networks:
-        - name: '${resource.Cloud_Network_1.name}'
-          network: '${resource.Cloud_Network_1.id}'
-  Cloud_Network_1:
-    type: Cloud.Network
-    properties:
-      name: Dev Network
-      networkType: existing
-      constraints:
-        - tag: 'env:dev'
