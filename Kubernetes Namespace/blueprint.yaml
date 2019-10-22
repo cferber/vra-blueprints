@@ -1,0 +1,12 @@
+name: Kubernetes Namespace
+version: 2
+formatVersion: 1
+inputs:
+  namespacename:
+    type: string
+    title: Name of Namespace
+resources:
+  Cloud_K8S_Namespace_1:
+    type: Cloud.K8S.Namespace
+    properties:
+      name: '${input.namespacename}'
