@@ -1,12 +1,12 @@
 name: CentOS Server
-version: 1
+version: 2
 formatVersion: 1
+inputs: {}
 resources:
-  Cloud_Machine_1:
-    type: Cloud.Machine
+  CentOS-VM-01:
+    type: Cloud.vSphere.Machine
     properties:
       CreateFileInGuest: true
-      image: CF-CentOS
-      flavor: CF-Small
-      constraints:
-        - tag: env:on-prem
+      imageRef: TEMP-CentOS7-for-vRA/snap-for-vRA-7.6
+      cpuCount: 1
+      totalMemoryMB: 1024
