@@ -1,0 +1,12 @@
+name: CentOS Server
+version: 1
+formatVersion: 1
+resources:
+  Cloud_Machine_1:
+    type: Cloud.Machine
+    properties:
+      CreateFileInGuest: true
+      image: CF-CentOS
+      flavor: CF-Small
+      constraints:
+        - tag: env:on-prem
