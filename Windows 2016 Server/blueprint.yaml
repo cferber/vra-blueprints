@@ -1,0 +1,19 @@
+name: Windows 2016 Server
+version: 1
+inputs: {}
+resources:
+  Windows 2016 Server:
+    type: Cloud.vSphere.Machine
+    properties:
+      imageRef: TEMP-WIN2016/snap-2020-01-20
+      cpuCount: 2
+      totalMemoryMB: 2048
+      customizationSpec: vra-windows-custom-WORKGROUP
+      networks:
+        - network: '${resource.Cloud_Network_1.id}'
+          assignment: static
+  Cloud_Network_1:
+    type: Cloud.Network
+    properties:
+      name: VM Network
+      networkType: existing
