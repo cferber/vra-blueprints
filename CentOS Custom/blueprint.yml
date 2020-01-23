@@ -1,0 +1,50 @@
+name: CentOS Custom
+version: 2
+formatVersion: 1
+inputs:
+  cpu:
+    type: string
+    title: CPU
+    enum:
+      - 1
+      - 2
+      - 4
+  memory:
+    type: string
+    title: RAM (MB)
+    enum:
+      - 1024
+      - 2048
+      - 4096
+      - 8192
+  disk:
+    type: string
+    title: Disk Size (GB)
+    enum:
+      - 10
+      - 50
+      - 100
+  environment:
+    type: string
+    enum:
+      - Datacenter Munich
+      - Datacenter Frankfurt
+  costcenter:
+    type: string
+    enum:
+      - 80001
+      - 80002
+resources:
+  CentOS-VM-01:
+    type: Cloud.vSphere.Machine
+    properties:
+      CreateFileInGuest: true
+      imageRef: TEMP-CentOS7-for-vRA/snap-for-vRA-7.6
+      cpuCount: '${input.cpu}'
+      totalMemoryMB: '${input.memory}'
+      attachedDisks:
+        - source: '${resource.Cloud_vSphere_Disk_1.id}'
+  Cloud_vSphere_Disk_1:
+    type: Cloud.vSphere.Disk
+    properties:
+      capacityGb: '${input.disk}'
