@@ -1,36 +1,41 @@
 name: CentOS Custom
-version: 1
+version: 2
 formatVersion: 1
 inputs:
   cpu:
-    type: string
+    type: integer
     title: CPU
+    default: 2
     enum:
       - 1
       - 2
       - 4
   memory:
-    type: string
+    type: integer
     title: RAM (MB)
+    default: 2048
     enum:
       - 1024
       - 2048
       - 4096
       - 8192
   disk:
-    type: string
+    type: integer
     title: Disk Size (GB)
+    default: 10
     enum:
       - 10
       - 50
       - 100
   environment:
     type: string
+    default: Datacenter Munich
     enum:
       - Datacenter Munich
       - Datacenter Frankfurt
   costcenter:
-    type: string
+    type: integer
+    default: 80001
     enum:
       - 80001
       - 80002
@@ -39,6 +44,7 @@ resources:
     type: Cloud.vSphere.Machine
     properties:
       CreateFileInGuest: true
+      CreateITopEntry: true
       imageRef: TEMP-CentOS7-for-vRA/snap-for-vRA-7.6
       cpuCount: '${input.cpu}'
       totalMemoryMB: '${input.memory}'
