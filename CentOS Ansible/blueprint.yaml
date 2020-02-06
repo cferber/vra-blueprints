@@ -1,5 +1,5 @@
 name: CentOS Ansible
-version: 1
+version: 2
 formatVersion: 1
 inputs:
   application:
@@ -17,6 +17,9 @@ resources:
       cpuCount: 2
       totalMemoryMB: 2048
       customizationSpec: vra-linux-custom
+      networks:
+        - network: '${resource.Cloud_vSphere_Network_1.id}'
+          assignment: static
   Ansible-1:
     type: Cloud.Ansible
     properties:
@@ -29,3 +32,7 @@ resources:
       playbooks:
         provision:
           - '/root/playbooks/${input.application}'
+  Cloud_vSphere_Network_1:
+    type: Cloud.vSphere.Network
+    properties:
+      networkType: existing
