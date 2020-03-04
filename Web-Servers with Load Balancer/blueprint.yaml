@@ -1,0 +1,41 @@
+name: Web-Servers with Load Balancer
+version: 1
+description: CentOS with on-demand Network created by NSX
+formatVersion: 1
+inputs:
+  webserver-count:
+    type: integer
+    description: ''
+    default: '2'
+    title: Number of Webservers
+    minimum: 2
+    maximum: 4
+resources:
+  Cloud_LoadBalancer_1:
+    type: Cloud.LoadBalancer
+    properties:
+      routes:
+        - port: '80'
+          protocol: tcp
+          instancePort: ''
+          instanceProtocol: ''
+          healthCheckConfiguration:
+            port: '80'
+            protocol: tcp
+      network: '${resource.Cloud_NSX_Network_1.id}'
+      instances:
+        - '${resource.Cloud_Machine_1.id}'
+      internetFacing: false
+  Cloud_Machine_1:
+    type: Cloud.Machine
+    properties:
+      count: ${input.webserver-count}
+      flavor: CF-Small
+      imageRef: TEMP-CentOS7-for-vRA/snap-for-vRA-7.6
+      customizationSpec: vra-linux-custom
+      networks:
+        - network: '${resource.Cloud_NSX_Network_1.id}'
+  Cloud_NSX_Network_1:
+    type: Cloud.NSX.Network
+    properties:
+      networkType: routed
