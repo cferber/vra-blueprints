@@ -1,5 +1,5 @@
 name: Wordpress Stack
-version: 2
+version: 3
 iteration: 1
 description: More Complex BP with External Storage
 inputs:
@@ -131,8 +131,6 @@ resources:
   Target-Network:
     type: Cloud.Network
     properties:
-      name: CF-WP-Network
       networkType: existing
       constraints:
         - tag: '${input.env}'
-        - tag: 'network:WP'
