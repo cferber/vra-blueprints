@@ -1,5 +1,5 @@
 name: CentOS-Versioning
-version: 3
+version: 4
 formatVersion: 1
 inputs: {}
 resources:
@@ -7,6 +7,6 @@ resources:
     type: Cloud.vSphere.Machine
     properties:
       CreateFileInGuest: true
-      imageRef: TEMP-CentOS7-for-Versioning/version3
+      imageRef: TEMP-CentOS7-for-Versioning/version4
       cpuCount: 1
       totalMemoryMB: 1024
