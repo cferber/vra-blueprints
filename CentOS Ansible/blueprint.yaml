@@ -1,5 +1,5 @@
 name: CentOS Ansible
-version: 2
+version: 3
 formatVersion: 1
 inputs:
   application:
@@ -13,7 +13,7 @@ resources:
   CentOS Ansible:
     type: Cloud.vSphere.Machine
     properties:
-      imageRef: TEMP-CentOS7-for-vRA/snap-for-vRA8
+      imageRef: TEMP-CentOS7-for-vRA/snap-for-vRA-7.6
       cpuCount: 2
       totalMemoryMB: 2048
       customizationSpec: vra-linux-custom
