@@ -1,5 +1,5 @@
 name: CentOS Server
-version: 2
+version: 3
 formatVersion: 1
 inputs: {}
 resources:
@@ -7,6 +7,6 @@ resources:
     type: Cloud.vSphere.Machine
     properties:
       CreateFileInGuest: true
-      imageRef: TEMP-CentOS7-for-vRA/snap-for-vRA-7.6
+      imageRef: TEMP-CentOS7-for-vRA2/snap-vRA8
       cpuCount: 1
       totalMemoryMB: 1024
