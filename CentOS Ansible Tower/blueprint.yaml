@@ -1,5 +1,5 @@
 name: CentOS Ansible Tower
-version: 2
+version: 1
 formatVersion: 1
 inputs: {}
 resources:
