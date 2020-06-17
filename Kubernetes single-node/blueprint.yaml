@@ -1,0 +1,77 @@
+name: Kubernetes single-node
+version: 1
+formatVersion: 1
+inputs:
+  lb-ip-range:
+    type: string
+    title: IP-Range for Load Balancer
+    description: IP-Range for load balancer in format x.x.x.x-y.y.y.y
+resources:
+  CentOS:
+    type: Cloud.Machine
+    properties:
+      imageRef: TEMP-CentOS7-for-vRA2/snap-for-vRA8
+      flavor: CF-Large
+      resourceName: '${self.resourceName}'
+      ipAddress: '${self.ipaddress}'
+      vmName: '${self.vmname}'
+      networks:
+        - network: '${resource.Cloud_Network_1.id}'
+      cloudConfig: |
+        #cloud-config
+        repo_update: true
+        repo_upgrade: all
+
+        runcmd:
+         - swapoff -a
+         - sed -i '/swap/d' /etc/fstab
+         - setenforce 0
+         - sed -i ‘s/^SELINUX=enforcing$/SELINUX=permissive/’ /etc/selinux/config
+         - yum -y install docker
+         - systemctl enable docker 
+         - systemctl start docker 
+         - sysctl net.bridge.bridge-nf-call-iptables=1
+         - cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+         - "[kubernetes]"
+         - name=Kubernetes
+         - baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+         - enabled=1
+         - gpgcheck=1
+         - repo_gpgcheck=1
+         - gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+         - EOF
+         - yum install -y kubelet kubeadm kubectl
+         - systemctl enable kubelet
+         - systemctl start kubelet
+         - echo $HOSTNAME ${resource.CentOS.ipAddress} >> /etc/hosts
+         - kubeadm init
+         - mkdir -p /root/.kube
+         - sudo cp -i /etc/kubernetes/admin.conf /root/.kube/config
+         - sudo chown $(id -u):$(id -g) /root/.kube/config
+         - sudo kubectl taint nodes node-role.kubernetes.io/master:NoSchedule- --all=true
+         - sudo kubectl taint nodes node.kubernetes.io/not-ready:NoSchedule- --all=true
+         - sudo kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+         - sudo kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/namespace.yaml
+         - sudo kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.9.3/manifests/metallb.yaml
+         - sudo kubectl create secret generic -n metallb-system memberlist --from-literal=secretkey="$(openssl rand -base64 128)"
+         - cat <<EOF > config.yaml
+         - "apiVersion: v1"
+         - "kind: ConfigMap"
+         - "metadata:"
+         - "  namespace: metallb-system"
+         - "  name: config"
+         - "data:"
+         - "  config: |"
+         - "    address-pools:"
+         - "    - name: default"
+         - "      protocol: layer2"
+         - "      addresses:"
+         - "      - ${input.lb-ip-range}"
+         - EOF
+         - sudo kubectl apply -f config.yaml
+  Cloud_Network_1:
+    type: Cloud.Network
+    properties:
+      networkType: existing
+      constraints:
+        - tag: 'network:default'
