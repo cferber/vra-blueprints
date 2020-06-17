@@ -1,5 +1,5 @@
 name: Web-Servers with Load Balancer
-version: 3
+version: 4
 description: CentOS with on-demand Network created by NSX
 formatVersion: 1
 inputs:
@@ -37,7 +37,7 @@ resources:
     properties:
       count: '${input.webserver-count}'
       flavor: CF-Small
-      imageRef: TEMP-CentOS7-for-vRA/snap-for-vRA-7.6
+      imageRef: TEMP-CentOS7-for-vRA2/snap-vRA8
       customizationSpec: vra-linux-custom
       networks:
         - network: '${resource.Cloud_NSX_Network_1.id}'
