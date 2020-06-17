@@ -1,0 +1,34 @@
+name: CentOS Cloud-Init Static
+version: 1
+formatVersion: 1
+inputs: {}
+resources:
+  CentOS-VM-01:
+    type: Cloud.vSphere.Machine
+    properties:
+      CreateFileInGuest: true
+      imageRef: TEMP-CentOS7-cloudinit-static/snap-for-cloudinit
+      cpuCount: 1
+      totalMemoryMB: 1024
+      networks:
+        - network: '${resource.Cloud_Network_1.id}'
+        cloudConfig: |
+          #cloud-config
+          preservce_hostname: false
+          hostname: ${self.resourceName}
+          fqdn: ${self.resourceName}.space.local
+          network:
+            version: 1
+            config:
+              - type: physical
+                name: ens160
+                subnets:
+                  - type: static
+                    address: ${resource.CentOS-VM-01.networks.address[0]}/${resource.CentOS-VM-01.prefixLength}
+                    gateway: ${resource.CentOS-VM-01.gateway}
+  Cloud_Network_1:
+    type: Cloud.Network
+    properties:
+      networkType: existing
+      constraints:
+        - tag: 'network:default'
