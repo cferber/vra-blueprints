@@ -1,16 +1,24 @@
 name: Kubernetes single-node
-version: 1
+version: 2
 formatVersion: 1
 inputs:
   lb-ip-range:
     type: string
     title: IP-Range for Load Balancer
     description: IP-Range for load balancer in format x.x.x.x-y.y.y.y
+  kubernetes-version:
+    type: string
+    title: Kubernetes Version
+    enum:
+      - 1.18.4
+      - 1.17.7
+      - 1.16.11
+      - 1.12.10
 resources:
   CentOS:
     type: Cloud.Machine
     properties:
-      imageRef: TEMP-CentOS7-for-vRA2/snap-for-vRA8
+      imageRef: TEMP-CentOS7-vRA8/snap01
       flavor: CF-Large
       resourceName: '${self.resourceName}'
       ipAddress: '${self.ipaddress}'
@@ -40,7 +48,7 @@ resources:
          - repo_gpgcheck=1
          - gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
          - EOF
-         - yum install -y kubelet kubeadm kubectl
+         - yum install -y kubelet-${input.kubernetes-version} kubeadm-${input.kubernetes-version} kubectl-${input.kubernetes-version}
          - systemctl enable kubelet
          - systemctl start kubelet
          - echo $HOSTNAME ${resource.CentOS.ipAddress} >> /etc/hosts
