@@ -1,11 +1,11 @@
 name: Windows 2016 Server
-version: 2
+version: 3
 inputs: {}
 resources:
   Windows 2016 Server:
     type: Cloud.vSphere.Machine
     properties:
-      imageRef: TEMP-WIN2016/snap-2020-06-29
+      imageRef: TEMP-WIN2016/snap-2020-06-30
       cpuCount: 2
       totalMemoryMB: 2048
       customizationSpec: vra-windows-custom-WORKGROUP
