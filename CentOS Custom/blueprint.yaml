@@ -1,5 +1,5 @@
 name: CentOS Custom
-version: 10
+version: 11
 formatVersion: 1
 inputs:
   cpu:
@@ -39,6 +39,9 @@ inputs:
     enum:
       - 80001
       - 80002
+  select-network:
+    type: string
+    title: Select Network
 resources:
   CentOS-VM-01:
     type: Cloud.vSphere.Machine
@@ -63,3 +66,5 @@ resources:
     type: Cloud.vSphere.Network
     properties:
       networkType: existing
+      constraints:
+        - tag: '${input.select-network}'
