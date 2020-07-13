@@ -1,5 +1,5 @@
 name: CentOS on-demand network
-version: 5
+version: 6
 description: CentOS with on-demand Network created by NSX
 formatVersion: 1
 inputs:
@@ -17,7 +17,7 @@ resources:
     type: Cloud.Machine
     properties:
       flavor: CF-Small
-      imageRef: TEMP-CentOS7-vRA8/snap01
+      imageRef: TEMP-CentOS7-02/snap07
       networks:
         - network: '${resource.Cloud_NSX_Network_1.id}'
   Cloud_NSX_Network_1:
