@@ -1,5 +1,5 @@
 name: Kubernetes single-node
-version: 2
+version: 3
 formatVersion: 1
 inputs:
   lb-ip-range:
@@ -18,7 +18,7 @@ resources:
   CentOS:
     type: Cloud.Machine
     properties:
-      imageRef: TEMP-CentOS7-vRA8/snap01
+      imageRef: TEMP-CentOS7-02/snap05
       flavor: CF-Large
       resourceName: '${self.resourceName}'
       ipAddress: '${self.ipaddress}'
