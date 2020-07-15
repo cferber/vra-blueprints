@@ -1,5 +1,5 @@
 name: CentOS Custom
-version: 12
+version: 13
 formatVersion: 1
 inputs:
   cpu:
@@ -50,7 +50,7 @@ resources:
       project: '${env.projectName}'
       CreateFileInGuest: true
       CreateITopEntry: true
-      imageRef: TEMP-CentOS7-02/snap08
+      imageRef: TEMP-CentOS7-02/snap09
       cpuCount: '${input.cpu}'
       totalMemoryMB: '${input.memory}'
       attachedDisks:
