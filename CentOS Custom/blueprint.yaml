@@ -67,4 +67,4 @@ resources:
     properties:
       networkType: existing
       constraints:
-        - tag: '${input.select-network}'
+        - tag: '${input.selectnetwork}'
