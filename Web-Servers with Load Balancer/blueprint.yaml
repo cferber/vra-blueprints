@@ -1,5 +1,5 @@
 name: Web-Servers with Load Balancer
-version: 9
+version: 1
 description: CentOS with on-demand Network created by NSX
 formatVersion: 1
 inputs:
