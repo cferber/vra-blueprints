@@ -34,7 +34,7 @@ resources:
          - swapoff -a
          - sed -i '/swap/d' /etc/fstab
          - setenforce 0
-         - sed -i ‘s/^SELINUX=enforcing$/SELINUX=permissive/’ /etc/selinux/config
+         - sed -i ‘s/SELINUX=enforcing/SELINUX=permissive/’ /etc/selinux/config
          - yum -y install docker
          - systemctl enable docker 
          - systemctl start docker 
