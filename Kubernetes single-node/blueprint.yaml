@@ -1,5 +1,5 @@
 name: Kubernetes single-node
-version: 7
+version: 8
 formatVersion: 1
 inputs:
   lb-ip-range:
