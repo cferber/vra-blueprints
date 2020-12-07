@@ -1,5 +1,5 @@
 name: Wordpress Stack
-version: 4
+version: 5
 iteration: 1
 description: More Complex BP with External Storage
 inputs:
@@ -7,6 +7,7 @@ inputs:
     type: string
     enum:
       - 'env:on-prem'
+      - 'env:VMC'
       - 'env:AWS'
       - 'env:Azure'
     default: 'env:on-prem'
