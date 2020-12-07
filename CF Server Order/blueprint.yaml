@@ -1,11 +1,12 @@
 name: Linux Server
-version: 3
+version: 4
 formatVersion: 1
 inputs:
   env:
     type: string
     enum:
       - 'env:on-prem'
+      - 'env:VMC'
       - 'env:AWS'
       - 'env:Azure'
     default: 'env:on-prem'
@@ -37,3 +38,4 @@ resources:
       autoplacement: true
       constraints:
         - tag: '${input.env}'
+      attachedDisks: []
