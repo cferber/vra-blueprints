@@ -1,5 +1,5 @@
 name: CentOS Server
-version: 9
+version: 10
 formatVersion: 1
 inputs: {}
 resources:
@@ -7,6 +7,13 @@ resources:
     type: Cloud.vSphere.Machine
     properties:
       CreateFileInGuest: true
-      imageRef: TEMP-CentOS7-02/snap09
+      image: CentOS7
       cpuCount: 1
       totalMemoryMB: 1024
+      networks:
+        - network: '${resource.Cloud_vSphere_Network_1.id}'
+      attachedDisks: []
+  Cloud_vSphere_Network_1:
+    type: Cloud.vSphere.Network
+    properties:
+      networkType: existing
