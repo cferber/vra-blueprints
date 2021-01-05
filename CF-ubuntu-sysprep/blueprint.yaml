@@ -1,5 +1,5 @@
 name: Ubuntu Server with Sysprep
-version: 1
+version: 2
 inputs:
   env:
     type: string
