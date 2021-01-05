@@ -1,5 +1,5 @@
 name: Linux Server
-version: 6
+version: 5
 formatVersion: 1
 inputs:
   env:
