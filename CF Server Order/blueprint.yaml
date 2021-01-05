@@ -18,7 +18,7 @@ inputs:
       - Ubuntu
       - CentOS7
       - CentOS8
-    default: CF-Ubuntu
+    default: Ubuntu
     title: Operating System
     description: Target OS
   Availability:
