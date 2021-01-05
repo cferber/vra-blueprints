@@ -1,5 +1,5 @@
 name: Web-Servers with Load Balancer
-version: 2
+version: 3
 description: CentOS with on-demand Network created by NSX
 formatVersion: 1
 inputs:
@@ -25,7 +25,7 @@ resources:
           protocol: tcp
           healthCheckConfiguration:
             port: '80'
-            protocol: tcp
+            protocol: TCP
       network: '${resource.Cloud_NSX_Network_1.id}'
       instances:
         - '${resource.Cloud_Machine_1.id}'
