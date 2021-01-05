@@ -1,5 +1,5 @@
 name: Windows 2012 Server
-version: 1
+version: 2
 inputs:
   env:
     type: string
@@ -18,7 +18,7 @@ resources:
         - 0
         - 1
     properties:
-      image: CF-Windows2012
+      image: Windows2012R2
       flavor: CF-Medium
       cloudConfig: |
         #cloud-config
