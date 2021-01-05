@@ -1,5 +1,5 @@
 name: Linux Server
-version: 4
+version: 5
 formatVersion: 1
 inputs:
   env:
@@ -15,8 +15,8 @@ inputs:
   OS:
     type: string
     enum:
-      - CF-Ubuntu
-      - CF-CentOS
+      - Ubuntu
+      - CentOS7
     default: CF-Ubuntu
     title: Operating System
     description: Target OS
