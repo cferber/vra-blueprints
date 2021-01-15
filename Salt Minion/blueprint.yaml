@@ -1,0 +1,40 @@
+name: Salt Minion
+version: 1
+formatVersion: 1
+inputs: {}
+resources:
+  CentOS:
+    type: Cloud.vSphere.Machine
+    properties:
+      image: CentOS7
+      flavor: CF-Small
+      resourceName: '${self.resourceName}'
+      ipAddress: '${self.ipAddress}'
+      vmName: '${self.vmName}'
+      networks:
+        - network: '${resource.Cloud_Network_1.id}'
+          assignment: static
+      cloudConfig: |
+        #cloud-config
+        hostname: ${self.resourceName}
+        fqdn: ${self.resourceName}.space.local
+        network:
+          version: 1
+          config:
+            - type: physical
+              name: ens192
+              subnets:
+                - type: static
+                  address: ${resource.CentOS.networks.address[0]}/${resource.CentOS.prefixLength}
+                  gateway: ${resource.CentOS.gateway}
+                  dns_nameservers: 172.16.10.10
+
+        runcmd:
+          - curl -L https://bootstrap.saltstack.com -o install_salt.sh
+          - sudo sh install_salt.sh -A 172.16.10.47
+  Cloud_Network_1:
+    type: Cloud.Network
+    properties:
+      networkType: existing
+      constraints:
+        - tag: 'network:default'
