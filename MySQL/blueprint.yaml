@@ -1,0 +1,76 @@
+name: MySQL DB
+version: 1
+iteration: 1
+description: MySQL Database Blueprint
+inputs:
+  size:
+    type: string
+    enum:
+      - CF-Small
+      - CF-Medium
+    description: Size of Nodes
+    title: Database Tier Size
+  username:
+    type: string
+    minLength: 4
+    maxLength: 20
+    pattern: '[a-z]+'
+    title: Database Username
+    description: Database Username
+  userpassword:
+    type: string
+    pattern: '[a-z0-9A-Z@#$]+'
+    encrypted: false
+    title: Database Password
+    description: Database Password
+  archiveDiskSize:
+    type: number
+    default: 4
+    maximum: 10
+    title: Wordpress Archive Disk Size
+    description: Size of Wordpress archive disk
+  databaseDiskSize:
+    type: number
+    default: 4
+    maximum: 10
+    title: MySQL Data Disk Size
+    description: Size of database disk
+resources:
+  DBTier:
+    type: Cloud.vSphere.Machine
+    properties:
+      name: mysql
+      image: Ubuntu
+      flavor: '${input.size}'
+      tags:
+        - key: AppName
+          value: mysql
+      storage:
+        disks:
+          - capacityGb: '${input.databaseDiskSize}'
+            name: DatabaseDisk
+      remoteAccess:
+        authentication: usernamePassword
+        username: '${input.username}'
+        password: '${input.userpassword}'
+      cloudConfig: |
+        #cloud-config
+        hostname: ${self.resourceName}
+        repo_update: true
+        repo_upgrade: all
+        packages:
+         - mysql-server
+
+        runcmd:
+         - sed -e '/bind-address/ s/^#*/#/' -i /etc/mysql/mysql.conf.d/mysqld.cnf
+         - service mysql restart
+         - mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'mysqlpassword';"
+         - mysql -e "GRANT ALL PRIVILEGES ON *.* TO '${input.username}'@'%' IDENTIFIED BY '${input.userpassword}';"
+         - mysql -e "FLUSH PRIVILEGES;"
+      networks:
+        - name: '${resource["Target-Network"].name}'
+          network: '${resource["Target-Network"].id}'
+  Target-Network:
+    type: Cloud.Network
+    properties:
+      networkType: existing
