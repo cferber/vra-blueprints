@@ -1,5 +1,5 @@
 name: Wordpress Stack
-version: 6
+version: 7
 iteration: 1
 description: More Complex BP with External Storage
 inputs:
@@ -59,7 +59,7 @@ resources:
       name: mysql
       image: Ubuntu
       flavor: '${input.size}'
-      sshKeyName: CF-Key-US-Virginia
+      sshKeyName: CF-AWS-Frankfurt-1
       constraints:
         - tag: '${input.env}'
       tags:
@@ -100,7 +100,7 @@ resources:
           - capacityGb: '${input.archiveDiskSize}'
             name: ArchiveDisk
       flavor: CF-Small
-      sshKeyName: CF-Key-US-Virginia
+      sshKeyName: CF-AWS-Frankfurt-1
       constraints:
         - tag: '${input.env}'
       tags:
