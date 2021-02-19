@@ -1,5 +1,5 @@
 name: Wordpress Stack
-version: 7
+version: 8
 iteration: 1
 description: More Complex BP with External Storage
 inputs:
@@ -84,7 +84,8 @@ resources:
         runcmd:
          - sed -e '/bind-address/ s/^#*/#/' -i /etc/mysql/mysql.conf.d/mysqld.cnf
          - service mysql restart
-         - mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'mysqlpassword';"
+         - mysql -e "CREATE USER 'root'@'%' IDENTIFIED BY 'mysqlpassword';"
+         - mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';"
          - mysql -e "FLUSH PRIVILEGES;"
       networks:
         - name: '${resource["Target-Network"].name}'
@@ -116,7 +117,6 @@ resources:
          - php
          - php-mysql
          - libapache2-mod-php
-         - php-mcrypt
          - mysql-client
 
          runcmd:
