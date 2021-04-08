@@ -16,7 +16,7 @@ resources:
     type: Cloud.Terraform.Configuration
     properties:
       variables:
-        refresh_token: ${secret.refresh-token}
+        refresh_token: '${secret.refresh-token}'
         url: 'https://vra801.space.local'
         insecure: 'true'
         zone_name: VC02 / SPACE-DC
