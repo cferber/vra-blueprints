@@ -1,5 +1,5 @@
 name: Windows 2012 Server
-version: 2
+version: 3
 inputs:
   env:
     type: string
@@ -13,10 +13,6 @@ inputs:
 resources:
   Cloud_Machine_1:
     type: Cloud.Machine
-    metadata:
-      layoutPosition:
-        - 0
-        - 1
     properties:
       image: Windows2012R2
       flavor: CF-Medium
@@ -25,14 +21,11 @@ resources:
       constraints:
         - tag: '${input.env}'
       networks:
+        - network: '${resource.Cloud_Network_1.id}'
         - name: '${resource.Cloud_Network_1.name}'
           assignment: static
   Cloud_Network_1:
     type: Cloud.Network
-    metadata:
-      layoutPosition:
-        - 1
-        - 0
     properties:
       name: VM Network
       networkType: existing
