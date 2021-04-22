@@ -1,5 +1,5 @@
 name: Windows 2012 Server
-version: 3
+version: 4
 inputs:
   env:
     type: string
@@ -22,7 +22,6 @@ resources:
         - tag: '${input.env}'
       networks:
         - network: '${resource.Cloud_Network_1.id}'
-        - name: '${resource.Cloud_Network_1.name}'
           assignment: static
   Cloud_Network_1:
     type: Cloud.Network
