@@ -1,5 +1,5 @@
 name: CentOS Ansible Tower
-version: 7
+version: 8
 formatVersion: 1
 inputs: {}
 resources:
@@ -8,9 +8,9 @@ resources:
     properties:
       host: '${resource["CentOS Ansible"].*}'
       account: CF-ANSIBLE01-TOWER
-      jobTemplates:
+      templates:
         provision:
-          - Demo Job Template
+          - name: Demo Job Template
   CentOS Ansible:
     type: Cloud.vSphere.Machine
     properties:
