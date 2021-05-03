@@ -1,5 +1,5 @@
 name: Kubernetes single-node
-version: 9
+version: 10
 formatVersion: 1
 inputs:
   lb-ip-range:
@@ -10,6 +10,7 @@ inputs:
     type: string
     title: Kubernetes Version
     enum:
+      - 1.20.6
       - 1.18.4
       - 1.17.7
       - 1.16.11
