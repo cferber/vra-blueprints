@@ -1,0 +1,35 @@
+name: CentOS Server
+version: 1
+formatVersion: 1
+inputs: {}
+resources:
+  CentOS-VM-01:
+    type: Cloud.vSphere.Machine
+    properties:
+      CreateFileInGuest: true
+      image: CentOS7
+      cpuCount: 1
+      pwd: '${secret.secret-password}'
+      totalMemoryMB: 1024
+      networks:
+        - network: '${resource.Cloud_vSphere_Network_1.id}'
+          assignment: static
+      attachedDisks: []
+      saltConfiguration:
+        masterId: saltstack_enterprise_installer
+        minionId: '${self.resourceName}'
+        saltEnvironment: sse
+        stateFiles:
+          - /mariadb/init.sls
+      remoteAccess:
+        authentication: usernamePassword
+        username: root
+        password: VMware1!
+      cloudConfig: |
+        #cloud-config
+        runcmd:
+         - touch /tmp/cferber
+  Cloud_vSphere_Network_1:
+    type: Cloud.vSphere.Network
+    properties:
+      networkType: existing
