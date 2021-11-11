@@ -1,0 +1,11 @@
+---
+- name: Install Applications on CentOS
+  hosts: all
+  tasks:
+    - name: Install Mariadb Server
+      yum:
+        name: mariadb-server
+        state: latest
+    - name: Create user
+      user:
+        name: "{{ username }}"
