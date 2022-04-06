@@ -1,5 +1,5 @@
 name: Kubernetes single-node
-version: 10
+version: 11
 formatVersion: 1
 inputs:
   lb-ip-range:
@@ -45,8 +45,8 @@ resources:
          - name=Kubernetes
          - baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
          - enabled=1
-         - gpgcheck=1
-         - repo_gpgcheck=1
+         - gpgcheck=0
+         - repo_gpgcheck=0
          - gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
          - EOF
          - yum install -y kubelet-${input.kubernetes-version} kubeadm-${input.kubernetes-version} kubectl-${input.kubernetes-version}
