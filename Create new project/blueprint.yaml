@@ -1,0 +1,32 @@
+name: Create new project
+version: 1
+inputs:
+  project_name:
+    title: Project-Name
+    type: string
+  catalog_source_id:
+    type: string
+    title: Application Catalog
+    oneOf:
+      - title: Engineering Apps
+        const: a4f4407e-fca5-4aa1-8f7b-347824d13480
+      - title: Production Line Apps
+        const: f486301a-6748-4fe4-a205-f9eaffbd74a8
+resources:
+  terraform:
+    type: Cloud.Terraform.Configuration
+    properties:
+      variables:
+        refresh_token: ${secret.refresh-token}
+        url: https://vra801.space.local
+        insecure: 'true'
+        zone_name: vc02.space.local / SPACE-DC
+        project_name: ${input.project_name}
+        usertoadd: ${env.requestedBy}
+        catalog_source_id: ${input.catalog_source_id}
+      providers: []
+      terraformVersion: 0.13.5
+      configurationSource:
+        repositoryId: 97c3b4df-f07d-4ba0-8c95-aeaea6083e0f
+        commitId: db9dfbd89a67f99ba49d99af5b08ffc2543fcdcf
+        sourceDirectory: vra-project
