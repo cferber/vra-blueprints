@@ -1,0 +1,66 @@
+name: 3-tier-application
+version: 1
+formatVersion: 1
+inputs: {}
+resources:
+  Cloud_SecurityGroup_1:
+    type: Cloud.SecurityGroup
+    properties:
+      constraints:
+        - tag: sg:webservers
+      securityGroupType: existing
+  VM Presentation:
+    type: Cloud.vSphere.Machine
+    properties:
+      image: CentOS 8
+      cpuCount: 2
+      totalMemoryMB: 2048
+      networks:
+        - network: ${resource.Presentation.id}
+          securityGroups:
+            - ${resource.Cloud_SecurityGroup_1.id}
+  VM Application:
+    type: Cloud.vSphere.Machine
+    properties:
+      image: CentOS 8
+      cpuCount: 2
+      totalMemoryMB: 2048
+      networks:
+        - network: ${resource.Application.id}
+  VM Database:
+    type: Cloud.vSphere.Machine
+    properties:
+      image: CentOS 8
+      cpuCount: 2
+      totalMemoryMB: 2048
+      networks:
+        - network: ${resource.Database.id}
+  Presentation:
+    type: Cloud.NSX.Network
+    properties:
+      name: newcreatednetwork01
+      networkType: routed
+      tags:
+        - key: securityzone
+          value: presentation
+  Application:
+    type: Cloud.NSX.Network
+    properties:
+      networkType: routed
+      tags:
+        - key: securityzone
+          value: application
+  Database:
+    type: Cloud.NSX.Network
+    properties:
+      networkType: routed
+      tags:
+        - key: securityzone
+          value: database
+  T1 Router:
+    type: Cloud.NSX.Gateway
+    properties:
+      networks:
+        - ${resource.Presentation.id}
+        - ${resource.Application.id}
+        - ${resource.Database.id}
