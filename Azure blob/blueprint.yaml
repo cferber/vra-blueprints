@@ -1,0 +1,12 @@
+name: Azure blog
+version: 1
+formatVersion: 1
+inputs: {}
+resources:
+  Cloud_Service_Azure_Storage_Container_1:
+    type: Cloud.Service.Azure.Storage.Container
+    properties:
+      name: vra-blob-01
+      account: Azure VMware
+      resource_group_name: group6a945ec40c572af6a19c935ea0997479
+      storage_account_name: cfstorage01
