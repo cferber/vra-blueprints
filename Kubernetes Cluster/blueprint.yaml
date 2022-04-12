@@ -1,6 +1,6 @@
 name: Kubernetes Cluster
 formatVersion: 1
-version: 1
+version: 2
 inputs:
   clustername:
     type: string
@@ -9,9 +9,8 @@ inputs:
     type: string
     title: Kubernetes Plan
     enum:
-      - kubernetes-extra-small-1.19
-      - kubernetes-small-1.19
-      - kubernetes-large-1.19
+      - kubernetes-extra-small-1.22
+      - kubernetes-small-1.22
 resources:
   Cloud_Tanzu_Cluster_1:
     type: Cloud.Tanzu.Cluster
