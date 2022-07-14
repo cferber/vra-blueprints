@@ -31,7 +31,7 @@ resources:
       privateKeyFile: /root/.ssh/id_rsa
       playbooks:
         provision:
-          - '/root/playbooks/${input.application}'
+          - '/playbooks/${input.application}'
       hostVariables:
         username: ansible-user
   Cloud_vSphere_Network_1:
