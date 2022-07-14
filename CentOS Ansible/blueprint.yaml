@@ -1,5 +1,5 @@
 name: CentOS Ansible
-version: 15
+version: 16
 formatVersion: 1
 inputs:
   application:
@@ -28,7 +28,7 @@ resources:
       playbook-used: '${input.application}'
       account: CF-ANSIBLE01
       username: vmware
-      privateKeyFile: /vmware/.ssh/id_rsa
+      privateKeyFile: /home/vmware/.ssh/id_rsa
       playbooks:
         provision:
           - '/playbooks/${input.application}'
