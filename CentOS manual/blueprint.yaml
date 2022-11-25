@@ -1,0 +1,37 @@
+name: CentOS manual
+version: 1
+formatVersion: 1
+inputs:
+  ipaddress:
+    type: string
+    title: Specify IP address
+    description: Specify IP address in the format a.b.c.d
+  vmname:
+    type: string
+    title: Specify Hostname
+    description: no spaces allowed
+resources:
+  CentOS-VM-01:
+    type: Cloud.vSphere.Machine
+    properties:
+      CreateFileInGuest: true
+      image: CentOS7
+      cpuCount: 1
+      RenameVM: true
+      newName: ${input.vmname}
+      totalMemoryMB: 1024
+      networks:
+        - network: ${resource.Cloud_vSphere_Network_1.id}
+          assignment: static
+          address: ${input.ipaddress}
+          dns:
+            - 172.16.10.10
+          domain: space.local
+          gateway: 172.16.0.254
+      attachedDisks: []
+  Cloud_vSphere_Network_1:
+    type: Cloud.vSphere.Network
+    properties:
+      networkType: existing
+      constraints:
+        - tag: network:default
