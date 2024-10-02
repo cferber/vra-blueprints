@@ -6,20 +6,29 @@ inputs:
     type: string
     title: IP-Range for Load Balancer
     description: IP-Range for load balancer in format x.x.x.x-y.y.y.y
+  ip-assignment:
+    type: string
+    title: IP assignment
+    oneOf:
+      - title: static
+        const: static
+      - title: DHCP
+        const: dynamic
 resources:
   Kube:
     type: Cloud.Machine
     properties:
       image: CentOS9
       flavor: medium
+      customizeGuestOs: false
       resourceName: ${self.resourceName}
       ipAddress: ${self.ipaddress}
       vmName: ${self.vmname}
       constraints:
         - tag: env:vsphere
       networks:
-        - network: ${resource.MGMT.id}
-          assignment: dynamic
+        - network: ${resource.kube-net.id}
+          assignment: ${input.ip-assignment}
       cloudConfig: |
         #cloud-config
         repo_update: true
@@ -30,6 +39,16 @@ resources:
         fqdn: ${(self.resourceName)+".vcc.vmw"}
 
         runcmd:
+         - |
+           if [[ "${input.ip-assignment}" = "static" ]]; then
+             nmcli con add type ethernet con-name 'custom ens33' ifname ens33 ip4 ${self.networks[0].address}/${resource.kube-net.prefixLength} gw4 ${resource.kube-net.gateway}
+             nmcli con mod 'custom ens33' ipv4.dns "${join(resource.kube-net.dns,' ')}"
+             nmcli con mod 'custom ens33' ipv4.dns-search "${join(resource.kube-net.dnsSearchDomains,',')}"
+             nmcli con down 'System ens33' ; nmcli con up 'custom ens33'
+             nmcli con del 'System ens33'
+             hostnamectl set-hostname --static `dig -x ${self.networks[0].address} +short | cut -d "." -f 1`
+             hostnamectl set-hostname --pretty ${self.resourceName}
+           fi
          - swapoff -a
          - sed -i '/swap/d' /etc/fstab
          - setenforce 0
@@ -104,7 +123,7 @@ resources:
          - "  namespace: metallb-system"
          - EOF
          - kubectl apply -f /tmp/metallb-config.yaml
-  MGMT:
+  kube-net:
     type: Cloud.Network
     properties:
       networkType: existing
